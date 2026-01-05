@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>扫雷游戏</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- 左侧游戏棋盘区域 -->
+        <div class="game-board-section">
+            <div class="game-header">
+                <div class="game-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">剩余地雷:</span>
+                        <span id="mines-count" class="stat-value">10</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">时间:</span>
+                        <span id="time-display" class="stat-value">000</span>
+                    </div>
+                </div>
+                <button id="new-game-btn" class="new-game-button">新游戏</button>
+            </div>
+            <div id="game-board" class="game-board">
+                <!-- 游戏棋盘将在这里动态生成 -->
+            </div>
+            <div class="game-status">
+                <div id="game-result" class="game-result hidden">
+                    <span id="result-text"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右侧设置和积分区域 -->
+        <div class="settings-section">
+            <div class="settings-panel">
+                <h2>游戏设置</h2>
+                
+                <!-- 难度选择 -->
+                <div class="difficulty-selection">
+                    <h3>选择难度</h3>
+                    <div class="difficulty-options">
+                        <label class="difficulty-option">
+                            <input type="radio" name="difficulty" value="beginner" checked>
+                            <span>初级 (9×9, 10雷)</span>
+                        </label>
+                        <label class="difficulty-option">
+                            <input type="radio" name="difficulty" value="intermediate">
+                            <span>中等 (16×16, 40雷)</span>
+                        </label>
+                        <label class="difficulty-option">
+                            <input type="radio" name="difficulty" value="expert">
+                            <span>高级 (16×30, 99雷)</span>
+                        </label>
+                        <label class="difficulty-option">
+                            <input type="radio" name="difficulty" value="custom">
+                            <span>自定义</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 自定义难度设置 -->
+                <div id="custom-settings" class="custom-settings hidden">
+                    <h4>自定义设置</h4>
+                    <div class="custom-input-group">
+                        <label for="custom-rows">行数 (5-50):</label>
+                        <input type="number" id="custom-rows" min="5" max="50" value="9">
+                    </div>
+                    <div class="custom-input-group">
+                        <label for="custom-cols">列数 (5-50):</label>
+                        <input type="number" id="custom-cols" min="5" max="50" value="9">
+                    </div>
+                    <div class="custom-input-group">
+                        <label for="custom-mines">地雷数:</label>
+                        <input type="number" id="custom-mines" min="1" value="10">
+                    </div>
+                    <div class="custom-error" id="custom-error"></div>
+                </div>
+
+                <button id="apply-settings-btn" class="apply-button">应用设置</button>
+            </div>
+
+            <!-- 最佳成绩显示 -->
+            <div class="best-times-panel">
+                <h2>最佳成绩</h2>
+                <div class="best-times">
+                    <div class="best-time-item">
+                        <span class="difficulty-name">初级:</span>
+                        <span id="best-beginner" class="best-time">--</span>
+                    </div>
+                    <div class="best-time-item">
+                        <span class="difficulty-name">中等:</span>
+                        <span id="best-intermediate" class="best-time">--</span>
+                    </div>
+                    <div class="best-time-item">
+                        <span class="difficulty-name">高级:</span>
+                        <span id="best-expert" class="best-time">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 游戏说明 -->
+            <div class="instructions-panel">
+                <h2>游戏说明</h2>
+                <ul class="instructions-list">
+                    <li>左键点击打开方格</li>
+                    <li>右键点击标记地雷</li>
+                    <li>双击数字自动展开</li>
+                    <li>找出所有地雷获胜</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
