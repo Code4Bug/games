@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数学小天才 - 儿童数学游戏</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700&family=Comic+Neue:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 背景装饰 -->
+    <div class="bg-decoration">
+        <div class="bubble bubble-1"></div>
+        <div class="bubble bubble-2"></div>
+        <div class="bubble bubble-3"></div>
+        <div class="bubble bubble-4"></div>
+        <div class="star star-1">★</div>
+        <div class="star star-2">★</div>
+        <div class="star star-3">★</div>
+    </div>
+    
+    <!-- 主容器 -->
+    <div class="container">
+        <!-- 设置面板 -->
+        <div id="settingsPanel" class="panel settings-panel">
+            <div class="panel-header">
+                <svg class="icon-trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                    <path d="M4 22h16"></path>
+                    <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+                    <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+                    <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+                </svg>
+                <h1>数学小天才</h1>
+            </div>
+            
+            <div class="setting-group">
+                <label>
+                    <svg class="icon-label" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                    题目类型
+                </label>
+                <div class="button-group">
+                    <button class="btn-type active" data-type="addsubtract">
+                        <span class="btn-icon">➕➖</span>
+                        <span>加减法</span>
+                    </button>
+                    <button class="btn-type" data-type="multiplication">
+                        <span class="btn-icon">✖️</span>
+                        <span>乘法</span>
+                    </button>
+                    <button class="btn-type" data-type="mixed">
+                        <span class="btn-icon">🎲</span>
+                        <span>全部混合</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="setting-group">
+                <label>
+                    <svg class="icon-label" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+                    </svg>
+                    难度范围
+                </label>
+                <div class="difficulty-selector">
+                    <button class="btn-difficulty" data-range="10">10以内</button>
+                    <button class="btn-difficulty active" data-range="20">20以内</button>
+                    <button class="btn-difficulty" data-range="50">50以内</button>
+                    <button class="btn-difficulty" data-range="100">100以内</button>
+                </div>
+            </div>
+            
+            <div class="setting-group">
+                <label>
+                    <svg class="icon-label" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                    </svg>
+                    题目数量
+                </label>
+                <div class="number-selector">
+                    <button class="btn-number" data-count="5">5题</button>
+                    <button class="btn-number active" data-count="10">10题</button>
+                    <button class="btn-number" data-count="15">15题</button>
+                    <button class="btn-number" data-count="20">20题</button>
+                </div>
+            </div>
+            
+            <div class="setting-group">
+                <label>
+                    <svg class="icon-label" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="9" y1="9" x2="15" y2="9"></line>
+                        <line x1="9" y1="15" x2="15" y2="15"></line>
+                    </svg>
+                    做题模式
+                </label>
+                <div class="mode-selector">
+                    <button class="btn-mode active" data-mode="card">
+                        <svg class="mode-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                            <line x1="9" y1="7" x2="15" y2="7"></line>
+                            <line x1="9" y1="11" x2="15" y2="11"></line>
+                            <line x1="9" y1="15" x2="13" y2="15"></line>
+                        </svg>
+                        <div>
+                            <div class="mode-title">卡片模式</div>
+                            <div class="mode-desc">一题一题做</div>
+                        </div>
+                    </button>
+                    <button class="btn-mode" data-mode="exam">
+                        <svg class="mode-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="9" y1="15" x2="15" y2="15"></line>
+                        </svg>
+                        <div>
+                            <div class="mode-title">试卷模式</div>
+                            <div class="mode-desc">一次性做完</div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            
+            <button id="startBtn" class="btn-primary">
+                <svg class="btn-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                开始游戏
+            </button>
+            
+            <div class="formula-links">
+                <button id="showAdditionTable" class="btn-link">
+                    <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="12" y1="8" x2="12" y2="16"></line>
+                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                    </svg>
+                    查看加法口诀
+                </button>
+                <button id="showMultiplicationTable" class="btn-link">
+                    <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                    查看乘法口诀
+                </button>
+                <button id="showHistory" class="btn-link">
+                    <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    历史记录
+                </button>
+            </div>
+        </div>
+        
+        <!-- 游戏面板 - 卡片模式 -->
+        <div id="gamePanel" class="panel game-panel hidden">
+            <div class="game-header">
+                <button id="quitBtn" class="btn-icon-only" title="退出游戏">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+                <div class="progress-info">
+                    <span id="currentQuestion">1</span> / <span id="totalQuestions">10</span>
+                </div>
+                <div class="timer-info">
+                    <svg class="timer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span id="timer">00:00</span>
+                </div>
+                <div class="score-info">
+                    <svg class="score-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                    <span id="score">0</span>
+                </div>
+            </div>
+            
+            <div class="question-card">
+                <div class="question-number">第 <span id="questionNum">1</span> 题</div>
+                <div id="question" class="question-text"></div>
+                <input type="number" id="answerInput" class="answer-input" placeholder="?">
+                <div id="feedback" class="feedback"></div>
+            </div>
+            
+            <div class="game-actions">
+                <button id="submitBtn" class="btn-primary">
+                    <svg class="btn-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    提交答案
+                </button>
+                <button id="helpBtn" class="btn-secondary">
+                    <svg class="btn-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    需要帮助
+                </button>
+            </div>
+        </div>
+        
+        <!-- 试卷模式面板 -->
+        <div id="examPanel" class="panel exam-panel hidden">
+            <div class="exam-header">
+                <button id="quitExamBtn" class="btn-icon-only" title="退出游戏">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+                <h2>
+                    <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                    </svg>
+                    数学试卷
+                </h2>
+                <div class="exam-info-group">
+                    <div class="timer-info">
+                        <svg class="timer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <span id="examTimer">00:00</span>
+                    </div>
+                    <div class="exam-info">共 <span id="examTotal">10</span> 题</div>
+                </div>
+            </div>
+            
+            <div id="examQuestions" class="exam-questions"></div>
+            
+            <button id="submitExamBtn" class="btn-primary btn-submit-exam">
+                <svg class="btn-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                提交试卷
+            </button>
+        </div>
+        
+        <!-- 结果面板 -->
+        <div id="resultPanel" class="panel result-panel hidden">
+            <div class="result-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
+            <h2 id="resultTitle">太棒了！</h2>
+            <div class="result-stats">
+                <div class="stat-item">
+                    <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                    <div class="stat-value" id="finalScore">0</div>
+                    <div class="stat-label">总分</div>
+                </div>
+                <div class="stat-item">
+                    <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <div class="stat-value" id="correctCount">0</div>
+                    <div class="stat-label">答对</div>
+                </div>
+                <div class="stat-item">
+                    <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="16 12 12 8 8 12"></polyline>
+                        <line x1="12" y1="16" x2="12" y2="8"></line>
+                    </svg>
+                    <div class="stat-value" id="accuracy">0%</div>
+                    <div class="stat-label">正确率</div>
+                </div>
+                <div class="stat-item">
+                    <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <div class="stat-value" id="timeUsed">0秒</div>
+                    <div class="stat-label">用时</div>
+                </div>
+            </div>
+            <button id="restartBtn" class="btn-primary">
+                <svg class="btn-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="23 4 23 10 17 10"></polyline>
+                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                </svg>
+                再玩一次
+            </button>
+        </div>
+        
+        <!-- 口诀表模态框 -->
+        <div id="formulaModal" class="modal hidden">
+            <div class="modal-content">
+                <button class="modal-close">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+                <div id="formulaContent"></div>
+            </div>
+        </div>
+        
+        <!-- 口诀表底部面板 -->
+        <div id="formulaPanel" class="formula-panel hidden">
+            <div class="formula-panel-header">
+                <h3 id="formulaPanelTitle"></h3>
+                <button class="formula-panel-close">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div id="formulaPanelContent" class="formula-panel-content"></div>
+        </div>
+        
+        <!-- 历史记录抽屉面板 -->
+        <div id="historyModal" class="modal hidden">
+            <div class="modal-history">
+                <button class="modal-close" id="closeHistory">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+                <div class="history-header">
+                    <h3>
+                        <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        历史记录
+                    </h3>
+                    <button id="clearHistory" class="btn-clear-history">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                        清空记录
+                    </button>
+                </div>
+                <div id="historyContent" class="history-content"></div>
+            </div>
+        </div>
+        
+        <!-- 自定义弹窗 -->
+        <div id="customDialog" class="custom-dialog hidden">
+            <div class="custom-dialog-content">
+                <div class="custom-dialog-icon"></div>
+                <h3 class="custom-dialog-title"></h3>
+                <p class="custom-dialog-message"></p>
+                <div class="custom-dialog-buttons"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="main.js"></script>
+</body>
+</html>
