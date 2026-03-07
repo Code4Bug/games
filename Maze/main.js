@@ -17,6 +17,8 @@ class MazeGame {
         this.bestTimes = this.loadBestTimes();
         this.offsetX = 0;
         this.offsetY = 0;
+        this.autoCompleting = false;
+        this.autoCompleteInterval = null;
         
         // 初始化画布大小和难度设置
         this.setDifficulty(this.currentDifficulty);
@@ -24,6 +26,8 @@ class MazeGame {
     }
 
     initializeGame() {
+        // 停止自动完成（如果正在进行）
+        this.stopAutoComplete();
         this.generateMaze();
         this.resetGameStats();
         this.draw();
@@ -61,9 +65,8 @@ class MazeGame {
     setDifficulty(difficulty, customSize = null) {
         this.currentDifficulty = difficulty;
         
-        // 固定画布大小
-        const canvasWidth = 600;
-        const canvasHeight = 600;
+        // 保持固定的画布显示尺寸
+        const displaySize = 600;
         
         switch (difficulty) {
             case 'easy':
@@ -76,24 +79,35 @@ class MazeGame {
                 this.rows = this.cols = 35;
                 break;
             case 'custom':
-                if (customSize && customSize >= 10 && customSize <= 50) {
+                if (customSize && customSize >= 10 && customSize <= 99) {
                     this.rows = this.cols = customSize;
                 }
                 break;
         }
         
-        // 计算单元格大小以满铺画布
-        this.cellSize = Math.floor(Math.min(canvasWidth / this.cols, canvasHeight / this.rows));
+        // 确保迷宫尺寸为奇数（算法要求）
+        if (this.rows % 2 === 0) this.rows++;
+        if (this.cols % 2 === 0) this.cols++;
         
-        // 更新画布大小（保持固定）
-        this.canvas.width = canvasWidth;
-        this.canvas.height = canvasHeight;
+        // 计算单元格大小，让迷宫填满固定尺寸的画布
+        this.cellSize = Math.floor(displaySize / Math.max(this.rows, this.cols));
         
-        // 计算实际绘制区域的偏移量，使迷宫居中
-        this.offsetX = (canvasWidth - this.cols * this.cellSize) / 2;
-        this.offsetY = (canvasHeight - this.rows * this.cellSize) / 2;
+        // 确保单元格大小至少为2像素，保证可见性
+        this.cellSize = Math.max(2, this.cellSize);
         
-        // 重新设置出口位置
+        // 画布保持固定尺寸
+        this.canvas.width = displaySize;
+        this.canvas.height = displaySize;
+        
+        // 计算实际迷宫占用的像素大小
+        const mazePixelWidth = this.cols * this.cellSize;
+        const mazePixelHeight = this.rows * this.cellSize;
+        
+        // 计算居中偏移量，让迷宫在固定画布中居中
+        this.offsetX = Math.floor((displaySize - mazePixelWidth) / 2);
+        this.offsetY = Math.floor((displaySize - mazePixelHeight) / 2);
+        
+        // 重新设置出口位置（确保为奇数坐标）
         this.exit = { x: this.cols - 2, y: this.rows - 2 };
         
         this.initializeGame();
@@ -210,6 +224,10 @@ class MazeGame {
             this.hideSolution();
         });
         
+        document.getElementById('autoCompleteBtn').addEventListener('click', () => {
+            this.autoComplete();
+        });
+        
         // 难度选择
         document.querySelectorAll('input[name="difficulty"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
@@ -239,8 +257,8 @@ class MazeGame {
         if (selectedDifficulty === 'custom') {
             const customSize = parseInt(document.getElementById('custom-size').value);
             
-            if (isNaN(customSize) || customSize < 10 || customSize > 50) {
-                errorDiv.textContent = '迷宫大小必须在10-50之间';
+            if (isNaN(customSize) || customSize < 10 || customSize > 99) {
+                errorDiv.textContent = '迷宫大小必须在10-99之间';
                 return;
             }
             
@@ -316,6 +334,75 @@ class MazeGame {
         document.getElementById('solveMazeBtn').classList.remove('hidden');
         document.getElementById('hideSolutionBtn').classList.add('hidden');
         this.draw();
+    }
+
+    autoComplete() {
+        // 如果已经在自动完成中，停止
+        if (this.autoCompleting) {
+            this.stopAutoComplete();
+            return;
+        }
+        
+        // 如果游戏已经赢了，不执行
+        if (this.gameWon) {
+            return;
+        }
+        
+        // 找到解决方案路径
+        const path = this.findSolution();
+        
+        if (path.length === 0) {
+            alert('无法找到通往出口的路径！');
+            return;
+        }
+        
+        // 开始自动完成
+        this.autoCompleting = true;
+        let currentStep = 1; // 从1开始，因为0是起点
+        
+        // 更新按钮状态
+        const autoBtn = document.getElementById('autoCompleteBtn');
+        autoBtn.innerHTML = '<span class="btn-icon">⏸️</span><span>停止</span>';
+        autoBtn.classList.add('btn-warning');
+        
+        // 根据迷宫大小调整移动速度：小迷宫慢一点，大迷宫快一点
+        const speed = this.rows <= 25 ? 300 : this.rows <= 50 ? 150 : 100;
+        
+        // 每隔一定时间移动一步
+        this.autoCompleteInterval = setInterval(() => {
+            if (currentStep >= path.length) {
+                this.stopAutoComplete();
+                return;
+            }
+            
+            const nextPos = path[currentStep];
+            this.player = { x: nextPos.x, y: nextPos.y };
+            this.steps++;
+            document.getElementById('stepCount').textContent = this.steps;
+            
+            // 检查是否到达出口
+            if (this.player.x === this.exit.x && this.player.y === this.exit.y) {
+                this.gameWon = true;
+                this.stopAutoComplete();
+                this.showWinMessage();
+            }
+            
+            this.draw();
+            currentStep++;
+        }, speed);
+    }
+
+    stopAutoComplete() {
+        this.autoCompleting = false;
+        if (this.autoCompleteInterval) {
+            clearInterval(this.autoCompleteInterval);
+            this.autoCompleteInterval = null;
+        }
+        
+        // 恢复按钮状态
+        const autoBtn = document.getElementById('autoCompleteBtn');
+        autoBtn.innerHTML = '<span class="btn-icon">🚀</span><span>自动完成</span>';
+        autoBtn.classList.remove('btn-warning');
     }
 
     findSolution() {
@@ -425,8 +512,9 @@ class MazeGame {
         // 绘制解决方案路径
         if (this.showingSolution && this.solution.length > 1) {
             this.ctx.strokeStyle = '#48bb78';
-            this.ctx.lineWidth = Math.max(2, this.cellSize / 8);
+            this.ctx.lineWidth = Math.max(1, this.cellSize / 8);
             this.ctx.lineCap = 'round';
+            this.ctx.lineJoin = 'round';
             this.ctx.beginPath();
             
             for (let i = 0; i < this.solution.length; i++) {
@@ -452,13 +540,14 @@ class MazeGame {
         this.ctx.fillRect(exitDrawX + 2, exitDrawY + 2, 
                          this.cellSize - 4, this.cellSize - 4);
         
-        // 绘制出口标识
-        if (this.cellSize >= 12) {
+        // 绘制出口标识（仅在格子足够大时）
+        if (this.cellSize >= 8) {
             this.ctx.fillStyle = '#fff';
-            this.ctx.font = `${Math.max(8, this.cellSize * 0.5)}px Arial`;
+            this.ctx.font = `${Math.max(6, this.cellSize * 0.5)}px Arial`;
             this.ctx.textAlign = 'center';
+            this.ctx.textBaseline = 'middle';
             this.ctx.fillText('出', exitDrawX + this.cellSize / 2, 
-                             exitDrawY + this.cellSize / 2 + this.cellSize * 0.15);
+                             exitDrawY + this.cellSize / 2);
         }
         
         // 绘制玩家
@@ -467,17 +556,18 @@ class MazeGame {
         
         this.ctx.fillStyle = '#3182ce';
         this.ctx.beginPath();
+        const playerRadius = Math.max(2, this.cellSize / 3);
         this.ctx.arc(playerDrawX + this.cellSize / 2, 
                     playerDrawY + this.cellSize / 2, 
-                    Math.max(3, this.cellSize / 3), 0, 2 * Math.PI);
+                    playerRadius, 0, 2 * Math.PI);
         this.ctx.fill();
         
         // 绘制玩家眼睛（仅在格子足够大时）
-        if (this.cellSize >= 12) {
+        if (this.cellSize >= 8) {
             this.ctx.fillStyle = '#fff';
             this.ctx.beginPath();
-            const eyeSize = Math.max(1, this.cellSize / 12);
-            const eyeOffset = Math.max(2, this.cellSize / 8);
+            const eyeSize = Math.max(0.5, this.cellSize / 12);
+            const eyeOffset = Math.max(1, this.cellSize / 8);
             this.ctx.arc(playerDrawX + this.cellSize / 2 - eyeOffset, 
                         playerDrawY + this.cellSize / 2 - eyeOffset, 
                         eyeSize, 0, 2 * Math.PI);
