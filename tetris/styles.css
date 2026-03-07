@@ -1,0 +1,565 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Press Start 2P', cursive;
+    background: #000000;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 10px;
+    overflow: hidden;
+}
+
+/* 游戏包装器 */
+.game-wrapper {
+    max-width: 900px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: 100vh;
+    position: relative;
+}
+
+/* 游戏标题区 */
+.game-header {
+    text-align: center;
+    margin-bottom: 15px;
+    flex-shrink: 0;
+}
+
+.game-title {
+    font-size: 32px;
+    color: #00ff00;
+    text-shadow: 3px 3px 0 #008800,
+                 6px 6px 0 rgba(0, 136, 0, 0.5);
+    letter-spacing: 6px;
+    margin-bottom: 12px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+/* 分数显示 */
+.score-display {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.score-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.score-item .label {
+    font-size: 8px;
+    color: #888888;
+    letter-spacing: 1px;
+}
+
+.score-item .value {
+    font-size: 16px;
+    color: #ffffff;
+    text-shadow: 2px 2px 0 #ff0000;
+}
+
+/* 游戏容器 */
+.game-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 15px;
+    flex: 1;
+    min-height: 0;
+}
+
+/* 游戏棋盘 */
+.game-board {
+    position: relative;
+}
+
+#gameCanvas {
+    display: block;
+    border: 4px solid #333333;
+    background: #000000;
+    box-shadow: 0 0 0 2px #666666,
+                0 0 20px rgba(0, 255, 0, 0.3);
+}
+
+/* 侧边面板 */
+.side-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 130px;
+}
+
+.panel-section {
+    background: #1a1a1a;
+    border: 3px solid #333333;
+    padding: 8px;
+}
+
+.panel-title {
+    font-size: 8px;
+    color: #00ff00;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+/* Canvas 包装器 */
+.canvas-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000000;
+    border: 2px solid #333333;
+    padding: 2px;
+}
+
+#nextCanvas, #holdCanvas {
+    display: block;
+    background: #000000;
+    width: 100px;
+    height: 100px;
+}
+
+/* 最佳成绩 */
+.best-scores {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.best-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.best-label {
+    font-size: 7px;
+    color: #888888;
+    letter-spacing: 1px;
+}
+
+.best-value {
+    font-size: 12px;
+    color: #ffff00;
+    text-shadow: 2px 2px 0 #888800;
+}
+
+/* 自定义下拉选择 */
+.custom-select {
+    position: relative;
+    width: 100%;
+    cursor: pointer;
+    user-select: none;
+}
+
+.select-display {
+    padding: 6px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 7px;
+    background: #000000;
+    color: #ffffff;
+    border: 2px solid #333333;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.custom-select:hover .select-display {
+    border-color: #00ff00;
+}
+
+.select-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #000000;
+    border: 2px solid #00ff00;
+    margin-top: 2px;
+    display: none;
+    z-index: 100;
+    box-shadow: 0 4px 0 #008800;
+}
+
+.custom-select.active .select-options {
+    display: block;
+}
+
+.select-option {
+    padding: 6px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 7px;
+    color: #ffffff;
+    text-align: center;
+    transition: all 0.1s;
+}
+
+.select-option:hover {
+    background: #00ff00;
+    color: #000000;
+}
+
+.select-option.selected {
+    background: #1a1a1a;
+    color: #00ff00;
+}
+
+/* 游戏控制按钮 */
+.game-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+}
+
+.control-btn {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 7px;
+    padding: 8px 16px;
+    background: #1a1a1a;
+    color: #ffffff;
+    border: 3px solid #333333;
+    cursor: pointer;
+    transition: all 0.1s;
+    letter-spacing: 1px;
+    position: relative;
+    box-shadow: 3px 3px 0 #000000;
+    white-space: nowrap;
+    min-width: 180px;
+}
+
+.control-btn:hover:not(:disabled) {
+    background: #2a2a2a;
+    border-color: #00ff00;
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 #000000;
+}
+
+.control-btn:active:not(:disabled) {
+    transform: translate(1px, 1px);
+    box-shadow: 2px 2px 0 #000000;
+}
+
+.control-btn.primary {
+    background: #00ff00;
+    color: #000000;
+    border-color: #00ff00;
+}
+
+.control-btn.primary:hover:not(:disabled) {
+    background: #00cc00;
+}
+
+.control-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* 操作说明 */
+.game-instructions {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 18px;
+    background: #1a1a1a;
+    border: 3px solid #333333;
+    min-width: 180px;
+    z-index: 10;
+    box-shadow: 0 4px 0 #000000;
+}
+
+.instruction-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+}
+
+.instruction-item .key {
+    font-size: 12px;
+    color: #00ff00;
+    padding: 8px 10px;
+    background: #000000;
+    border: 2px solid #333333;
+    min-width: 65px;
+    text-align: center;
+    flex-shrink: 0;
+    letter-spacing: 2px;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.instruction-item .action {
+    font-size: 10px;
+    color: #cccccc;
+    letter-spacing: 1px;
+    flex: 1;
+    text-align: right;
+    font-family: 'Press Start 2P', cursive;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .game-title {
+        font-size: 32px;
+        letter-spacing: 4px;
+    }
+
+    .score-display {
+        gap: 20px;
+    }
+
+    .score-item .value {
+        font-size: 16px;
+    }
+
+    .game-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .side-panel {
+        flex-direction: row;
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .panel-section {
+        flex: 1;
+    }
+
+    #gameCanvas {
+        width: 250px;
+        height: 500px;
+    }
+
+    #nextCanvas, #holdCanvas {
+        width: 80px;
+        height: 80px;
+    }
+
+    .control-btn {
+        font-size: 8px;
+        padding: 10px 20px;
+    }
+
+    .game-instructions {
+        top: 5px;
+        right: 5px;
+        padding: 10px;
+        gap: 8px;
+        min-width: 180px;
+    }
+
+    .instruction-item .key {
+        font-size: 8px;
+        padding: 5px 8px;
+        min-width: 60px;
+    }
+
+    .instruction-item .action {
+        font-size: 7px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    .game-title {
+        font-size: 24px;
+        letter-spacing: 2px;
+        margin-bottom: 15px;
+    }
+
+    .score-item .label {
+        font-size: 8px;
+    }
+
+    .score-item .value {
+        font-size: 14px;
+    }
+
+    #gameCanvas {
+        width: 200px;
+        height: 400px;
+    }
+
+    #nextCanvas, #holdCanvas {
+        width: 60px;
+        height: 60px;
+    }
+
+    .panel-title {
+        font-size: 8px;
+    }
+
+    .best-label {
+        font-size: 7px;
+    }
+
+    .best-value {
+        font-size: 12px;
+    }
+
+    .control-btn {
+        font-size: 7px;
+        padding: 8px 16px;
+    }
+
+    .game-instructions {
+        top: 5px;
+        right: 5px;
+        padding: 8px;
+        gap: 6px;
+        min-width: 150px;
+    }
+
+    .instruction-item {
+        gap: 8px;
+    }
+
+    .instruction-item .key {
+        font-size: 7px;
+        padding: 4px 6px;
+        min-width: 50px;
+    }
+
+    .instruction-item .action {
+        font-size: 6px;
+    }
+}
+
+/* 自定义弹窗 */
+.custom-alert {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+.custom-alert.show {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.alert-box {
+    background: #1a1a1a;
+    border: 4px solid #00ff00;
+    padding: 20px;
+    min-width: 300px;
+    box-shadow: 0 0 0 4px #000000,
+                0 0 30px rgba(0, 255, 0, 0.5);
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.alert-title {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 16px;
+    color: #ff0000;
+    text-align: center;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 0 #880000;
+}
+
+.alert-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.alert-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: #000000;
+    border: 2px solid #333333;
+}
+
+.alert-label {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    color: #888888;
+    letter-spacing: 1px;
+}
+
+.alert-value {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 14px;
+    color: #ffff00;
+    text-shadow: 2px 2px 0 #888800;
+}
+
+.alert-btn {
+    width: 100%;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+    padding: 12px;
+    background: #00ff00;
+    color: #000000;
+    border: 3px solid #00ff00;
+    cursor: pointer;
+    letter-spacing: 2px;
+    box-shadow: 4px 4px 0 #000000;
+    transition: all 0.1s;
+}
+
+.alert-btn:hover {
+    background: #00cc00;
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #000000;
+}
+
+.alert-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #000000;
+}

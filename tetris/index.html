@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TETRIS - 俄罗斯方块</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="game-wrapper">
+        <div class="game-header">
+            <h1 class="game-title">TETRIS</h1>
+            <div class="score-display">
+                <div class="score-item">
+                    <span class="label">SCORE</span>
+                    <span class="value" id="score">0</span>
+                </div>
+                <div class="score-item">
+                    <span class="label">LEVEL</span>
+                    <span class="value" id="level">1</span>
+                </div>
+                <div class="score-item">
+                    <span class="label">LINES</span>
+                    <span class="value" id="lines">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-container">
+            <div class="side-panel left-panel">
+                <div class="panel-section">
+                    <div class="panel-title">HOLD</div>
+                    <div class="canvas-wrapper">
+                        <canvas id="holdCanvas" width="100" height="100"></canvas>
+                    </div>
+                </div>
+                
+                <div class="panel-section">
+                    <div class="panel-title">BEST</div>
+                    <div class="best-scores">
+                        <div class="best-item">
+                            <span class="best-label">SCORE</span>
+                            <span class="best-value" id="bestScore">0</span>
+                        </div>
+                        <div class="best-item">
+                            <span class="best-label">LINES</span>
+                            <span class="best-value" id="bestLines">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-board">
+                <canvas id="gameCanvas" width="300" height="600"></canvas>
+            </div>
+
+            <div class="side-panel right-panel">
+                <div class="panel-section">
+                    <div class="panel-title">NEXT</div>
+                    <div class="canvas-wrapper">
+                        <canvas id="nextCanvas" width="100" height="100"></canvas>
+                    </div>
+                </div>
+                
+                <div class="panel-section">
+                    <div class="panel-title">LEVEL</div>
+                    <div class="custom-select" id="difficultySelect">
+                        <div class="select-display">NORMAL</div>
+                        <div class="select-options">
+                            <div class="select-option" data-value="easy">EASY</div>
+                            <div class="select-option selected" data-value="normal">NORMAL</div>
+                            <div class="select-option" data-value="hard">HARD</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="panel-section">
+                    <div class="panel-title">WIDTH</div>
+                    <div class="custom-select" id="widthSelect">
+                        <div class="select-display">10</div>
+                        <div class="select-options">
+                            <div class="select-option" data-value="8">8</div>
+                            <div class="select-option selected" data-value="10">10</div>
+                            <div class="select-option" data-value="12">12</div>
+                            <div class="select-option" data-value="16">16</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="panel-section">
+                    <div class="panel-title">MODE</div>
+                    <div class="custom-select" id="modeSelect">
+                        <div class="select-display">BASIC</div>
+                        <div class="select-options">
+                            <div class="select-option selected" data-value="basic">BASIC</div>
+                            <div class="select-option" data-value="advanced">ADVANCED</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-controls">
+            <button id="startBtn" class="control-btn primary">START (ENTER)</button>
+            <button id="pauseBtn" class="control-btn" disabled>PAUSE (ENTER)</button>
+            <button id="restartBtn" class="control-btn">RESTART (R)</button>
+        </div>
+    </div>
+    
+    <!-- 操作说明 - 右上角 -->
+    <div class="game-instructions">
+            <div class="instruction-item">
+                <span class="key">⬅ ➡</span>
+                <span class="action">移动</span>
+            </div>
+            <div class="instruction-item">
+                <span class="key">⬆</span>
+                <span class="action">旋转</span>
+            </div>
+            <div class="instruction-item">
+                <span class="key">⬇</span>
+                <span class="action">加速</span>
+            </div>
+            <div class="instruction-item">
+                <span class="key">SPACE</span>
+                <span class="action">瞬降</span>
+            </div>
+            <div class="instruction-item">
+                <span class="key">C</span>
+                <span class="action">暂存</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 自定义弹窗 -->
+    <div id="customAlert" class="custom-alert">
+        <div class="alert-box">
+            <div class="alert-title">GAME OVER</div>
+            <div class="alert-content">
+                <div class="alert-stat">
+                    <span class="alert-label">SCORE</span>
+                    <span class="alert-value" id="alertScore">0</span>
+                </div>
+                <div class="alert-stat">
+                    <span class="alert-label">LINES</span>
+                    <span class="alert-value" id="alertLines">0</span>
+                </div>
+            </div>
+            <button class="alert-btn" id="alertBtn">OK (ENTER)</button>
+        </div>
+    </div>
+    
+    <script src="main.js"></script>
+</body>
+</html>
