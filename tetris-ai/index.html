@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TETRIS - 俄罗斯方块</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="game-wrapper">
+        <div class="game-header">
+            <h1 class="game-title">TETRIS</h1>
+            <div class="score-display">
+                <div class="score-item">
+                    <span class="label">SCORE</span>
+                    <span class="value" id="score">0</span>
+                </div>
+                <div class="score-item">
+                    <span class="label">LEVEL</span>
+                    <span class="value" id="level">1</span>
+                </div>
+                <div class="score-item">
+                    <span class="label">LINES</span>
+                    <span class="value" id="lines">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-container">
+            <div class="side-panel left-panel">
+                <div class="panel-section">
+                    <div class="panel-title">HOLD</div>
+                    <div class="canvas-wrapper">
+                        <canvas id="holdCanvas" width="100" height="100"></canvas>
+                    </div>
+                </div>
+                
+                <div class="panel-section">
+                    <div class="panel-title">BEST</div>
+                    <div class="best-scores">
+                        <div class="best-item">
+                            <span class="best-label">SCORE</span>
+                            <span class="best-value" id="bestScore">0</span>
+                        </div>
+                        <div class="best-item">
+                            <span class="best-label">LINES</span>
+                            <span class="best-value" id="bestLines">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-board">
+                <canvas id="gameCanvas" width="300" height="600"></canvas>
+            </div>
+
+            <div class="side-panel right-panel">
+                <div class="panel-section">
+                    <div class="panel-title">NEXT</div>
+                    <div class="canvas-wrapper">
+                        <canvas id="nextCanvas" width="100" height="100"></canvas>
+                    </div>
+                </div>
+                
+                <div class="panel-section">
+                    <div class="panel-title">LEVEL</div>
+                    <div class="custom-select" id="difficultySelect">
+                        <div class="select-display">NORMAL</div>
+                        <div class="select-options">
+                            <div class="select-option" data-value="easy">EASY</div>
+                            <div class="select-option selected" data-value="normal">NORMAL</div>
+                            <div class="select-option" data-value="hard">HARD</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="panel-section">
+                    <div class="panel-title">WIDTH</div>
+                    <div class="custom-select" id="widthSelect">
+                        <div class="select-display">10</div>
+                        <div class="select-options">
+                            <div class="select-option" data-value="8">8</div>
+                            <div class="select-option selected" data-value="10">10</div>
+                            <div class="select-option" data-value="12">12</div>
+                            <div class="select-option" data-value="16">16</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="panel-section">
+                    <div class="panel-title">MODE</div>
+                    <div class="custom-select" id="modeSelect">
+                        <div class="select-display">BASIC</div>
+                        <div class="select-options">
+                            <div class="select-option selected" data-value="basic">BASIC</div>
+                            <div class="select-option" data-value="advanced">ADVANCED</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="panel-section">
+                    <div class="panel-title">AI MODE</div>
+                    <div class="custom-select" id="aiModeSelect">
+                        <div class="select-display">OFF</div>
+                        <div class="select-options">
+                            <div class="select-option selected" data-value="off">OFF</div>
+                            <div class="select-option" data-value="on">ON</div>
+                            <div class="select-option" data-value="evolve">EVOLVE</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-controls">
+            <button id="startBtn" class="control-btn primary">START (ENTER)</button>
+            <button id="pauseBtn" class="control-btn" disabled>PAUSE (ENTER)</button>
+            <button id="restartBtn" class="control-btn">RESTART (R)</button>
+        </div>
+        
+        <!-- AI 训练统计 -->
+        <div class="ai-stats" id="aiStats" style="display: none;">
+            <div class="ai-stats-title">AI TRAINING STATS</div>
+            <div class="ai-stats-grid">
+                <div class="ai-stat-item">
+                    <span class="ai-stat-label">GAMES</span>
+                    <span class="ai-stat-value" id="aiGames">0</span>
+                </div>
+                <div class="ai-stat-item">
+                    <span class="ai-stat-label">AVG SCORE</span>
+                    <span class="ai-stat-value" id="aiAvgScore">0</span>
+                </div>
+                <div class="ai-stat-item">
+                    <span class="ai-stat-label">AVG LINES</span>
+                    <span class="ai-stat-value" id="aiAvgLines">0</span>
+                </div>
+                <div class="ai-stat-item">
+                    <span class="ai-stat-label">BEST SCORE</span>
+                    <span class="ai-stat-value" id="aiBestScore">0</span>
+                </div>
+            </div>
+            <button id="resetAIStatsBtn" class="control-btn" style="margin-top: 10px; width: 100%;">RESET STATS</button>
+        </div>
+        
+        <!-- 进化训练统计 -->
+        <div class="evolution-stats" id="evolutionStats" style="display: none;">
+            <div class="ai-stats-title">EVOLUTION TRAINING</div>
+            <div class="evolution-info">
+                <div class="evolution-item">
+                    <span class="evolution-label">GENERATION</span>
+                    <span class="evolution-value" id="evolutionGen">0</span>
+                </div>
+                <div class="evolution-item">
+                    <span class="evolution-label">INDIVIDUAL</span>
+                    <span class="evolution-value" id="evolutionInd">0/20</span>
+                </div>
+                <div class="evolution-item">
+                    <span class="evolution-label">BEST FITNESS</span>
+                    <span class="evolution-value" id="evolutionBest">0</span>
+                </div>
+                <div class="evolution-item">
+                    <span class="evolution-label">AVG FITNESS</span>
+                    <span class="evolution-value" id="evolutionAvg">0</span>
+                </div>
+            </div>
+            <div class="evolution-weights" id="evolutionWeights">
+                <div class="weight-title">BEST WEIGHTS:</div>
+                <div class="weight-item">
+                    <span>LINES:</span>
+                    <span id="weightLines">0.76</span>
+                </div>
+                <div class="weight-item">
+                    <span>HEIGHT:</span>
+                    <span id="weightHeight">-0.51</span>
+                </div>
+                <div class="weight-item">
+                    <span>HOLES:</span>
+                    <span id="weightHoles">-0.35</span>
+                </div>
+                <div class="weight-item">
+                    <span>BUMP:</span>
+                    <span id="weightBump">-0.18</span>
+                </div>
+            </div>
+            <div style="display: flex; gap: 5px; margin-top: 10px;">
+                <button id="stopEvolutionBtn" class="control-btn" style="flex: 1;">STOP</button>
+                <button id="resetEvolutionBtn" class="control-btn" style="flex: 1;">RESET</button>
+            </div>
+            <div style="display: flex; gap: 5px; margin-top: 5px;">
+                <button id="exportModelBtn" class="control-btn" style="flex: 1; font-size: 6px;">EXPORT</button>
+                <button id="importModelBtn" class="control-btn" style="flex: 1; font-size: 6px;">IMPORT</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 操作说明 - 右上角 -->
+    <div class="game-instructions">
+            <div class="instruction-item">
+                <span class="key">⬅ ➡</span>
+                <span class="action">移动</span>
+            </div>
+            <div class="instruction-item">
+                <span class="key">⬆</span>
+                <span class="action">旋转</span>
+            </div>
+            <div class="instruction-item">
+                <span class="key">⬇</span>
+                <span class="action">加速</span>
+            </div>
+            <div class="instruction-item">
+                <span class="key">SPACE</span>
+                <span class="action">瞬降</span>
+            </div>
+            <div class="instruction-item">
+                <span class="key">C</span>
+                <span class="action">暂存</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 自定义弹窗 -->
+    <div id="customAlert" class="custom-alert">
+        <div class="alert-box">
+            <div class="alert-title">GAME OVER</div>
+            <div class="alert-content">
+                <div class="alert-stat">
+                    <span class="alert-label">SCORE</span>
+                    <span class="alert-value" id="alertScore">0</span>
+                </div>
+                <div class="alert-stat">
+                    <span class="alert-label">LINES</span>
+                    <span class="alert-value" id="alertLines">0</span>
+                </div>
+            </div>
+            <button class="alert-btn" id="alertBtn">OK (ENTER)</button>
+        </div>
+    </div>
+    
+    <script src="genetic-trainer.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

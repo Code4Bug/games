@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>围棋游戏 - AI对弈</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-wrapper">
+        <div class="header">
+            <h1>🎯 围棋</h1>
+            <button id="help-btn" class="help-btn">📖 帮助</button>
+        </div>
+        
+        <div class="game-container">
+            <div class="info-panel">
+                <div class="player-status">
+                    <div class="status-item">
+                        <span class="label">当前回合</span>
+                        <span class="value" id="current-player">黑方</span>
+                    </div>
+                </div>
+                
+                <div class="captures-info">
+                    <div class="stats-group">
+                        <div class="capture-item">
+                            <span class="stone black-stone"></span>
+                            <span class="capture-label">黑方棋子</span>
+                            <span class="capture-value" id="black-stones">0</span>
+                        </div>
+                        <div class="capture-item secondary">
+                            <span class="capture-label">提子</span>
+                            <span class="capture-value" id="black-captures">0</span>
+                        </div>
+                    </div>
+                    <div class="stats-group">
+                        <div class="capture-item">
+                            <span class="stone white-stone"></span>
+                            <span class="capture-label">白方棋子</span>
+                            <span class="capture-value" id="white-stones">0</span>
+                        </div>
+                        <div class="capture-item secondary">
+                            <span class="capture-label">提子</span>
+                            <span class="capture-value" id="white-captures">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="board-container">
+                <canvas id="board" width="600" height="600"></canvas>
+            </div>
+            
+            <div class="controls">
+                <button id="ai-toggle-btn" class="btn btn-ai">AI: 关闭</button>
+                <button id="ai-vs-ai-btn" class="btn btn-ai-vs-ai">🤖 AI对战</button>
+                <button id="pass-btn" class="btn btn-pass">虚手</button>
+                <button id="undo-btn" class="btn btn-undo">悔棋</button>
+                <button id="restart-btn" class="btn btn-restart">重新开始</button>
+            </div>
+            
+            <div class="speed-control">
+                <label for="speed-slider">AI速度:</label>
+                <input type="range" id="speed-slider" min="1" max="5" value="3" step="1">
+                <span id="speed-label">正常</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 帮助模态框 -->
+    <div id="help-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>围棋游戏帮助</h2>
+                <button id="close-modal" class="close-btn">✕</button>
+            </div>
+            <div class="modal-body">
+                <section>
+                    <h3>🎮 基本规则</h3>
+                    <ul>
+                        <li><strong>落子：</strong>黑方先行，双方轮流在交叉点上落子</li>
+                        <li><strong>提子：</strong>无气（被完全包围）的棋子会被提掉</li>
+                        <li><strong>禁止自杀：</strong>不能下在会导致自己棋子立即无气的位置</li>
+                        <li><strong>打劫规则：</strong>禁止立即回提造成全局同形</li>
+                        <li><strong>虚手：</strong>放弃本回合落子，双方连续虚手游戏结束</li>
+                    </ul>
+                </section>
+                
+                <section>
+                    <h3>🤖 AI功能</h3>
+                    <ul>
+                        <li><strong>人机对战：</strong>点击"AI: 关闭"按钮启用AI对手（AI执白棋）</li>
+                        <li><strong>AI对战：</strong>点击"🤖 AI对战"观看两个AI互相下棋</li>
+                        <li><strong>暂停/继续：</strong>AI对战模式下可随时暂停或继续</li>
+                        <li><strong>速度调节：</strong>使用滑块调节AI下子速度（很慢/慢/正常/快/很快）</li>
+                        <li><strong>AI策略：</strong>AI会评估提子、连接、威胁、位置价值等因素</li>
+                    </ul>
+                </section>
+                
+                <section>
+                    <h3>🎯 操作说明</h3>
+                    <ul>
+                        <li><strong>落子：</strong>点击棋盘交叉点放置棋子</li>
+                        <li><strong>虚手：</strong>点击"虚手"按钮跳过本回合</li>
+                        <li><strong>悔棋：</strong>点击"悔棋"按钮撤销上一步</li>
+                        <li><strong>重新开始：</strong>点击"重新开始"清空棋盘</li>
+                    </ul>
+                </section>
+                
+                <section>
+                    <h3>💡 游戏技巧</h3>
+                    <ul>
+                        <li><strong>占据要点：</strong>星位（标记点）是重要的战略位置</li>
+                        <li><strong>保持连接：</strong>尽量让己方棋子相互连接</li>
+                        <li><strong>注意气数：</strong>保证己方棋子有足够的气</li>
+                        <li><strong>威胁对方：</strong>减少对方棋子的气，寻找提子机会</li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+    </div>
+    
+    <script src="main.js"></script>
+</body>
+</html>
